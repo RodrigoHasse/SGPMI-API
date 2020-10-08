@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System;
 //using Swashbuckle.AspNetCore.Swagger;
 using System.Linq;
 using System.Security.Claims;
@@ -44,7 +45,11 @@ namespace CamadaWebApi
 
             services.AddMediatR(typeof(PushNotification));
 
-            services.AddSignalR();
+            services.AddSignalR(options =>
+            {
+                
+                    options.EnableDetailedErrors = true;
+            });
 
             var appSettings = appSettingsSection.Get<AppSettingsHelper>();
 

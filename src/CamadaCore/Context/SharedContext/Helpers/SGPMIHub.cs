@@ -7,7 +7,12 @@ namespace CamadaCore.Context.SharedContext.Helpers
     {
         public async Task AtualizarMaquinasApp()
         {            
-            await Clients.Others.SendAsync("AtualizarMaquinas", null);
-        }        
+            await Clients.Others.SendAsync("AtualizarMaquinas");
+        }
+
+        public async Task AbrirConexao()
+        {
+            await Clients.Caller.SendAsync("ConexaoAberta");
+        }
     }
 }
