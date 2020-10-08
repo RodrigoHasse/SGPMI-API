@@ -37,20 +37,20 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Maquinas
             await SalvarAsync(maquina);
             try
             {
-                CancellationToken cancellationToken = new CancellationToken();
-                await _mediator.Publish(new PushNotification
-                {
-                    app_id = "056f6456-136c-4238-80c6-33f8fe521bcc",
-                    included_segments = "All",
-                    data = "bar",
-                    subtitle = "Aviso",
-                    headings = "Aviso",
-                    contents = maquina.Nome + (maquina.Ligada ? " foi ligada" : " foi desligada")
-                }, cancellationToken) ;
+                //CancellationToken cancellationToken = new CancellationToken();
+                //await _mediator.Publish(new PushNotification
+                //{
+                //    app_id = "056f6456-136c-4238-80c6-33f8fe521bcc",
+                //    included_segments = "All",
+                //    data = "bar",
+                //    subtitle = "Aviso",
+                //    headings = "Aviso",
+                //    contents = maquina.Nome + (maquina.Ligada ? " foi ligada" : " foi desligada")
+                //}, cancellationToken) ;
 
                 SGPMIHub _signalR = new SGPMIHub();
 
-                List<Maquina> maquinas = new List<Maquina>();
+                //List<Maquina> maquinas = new List<Maquina>();
                 await _signalR.AtualizarMaquinasApp();
             }
             catch (Exception ex)
