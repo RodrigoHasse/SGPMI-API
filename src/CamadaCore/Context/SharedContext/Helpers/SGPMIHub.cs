@@ -1,18 +1,30 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Threading.Tasks;
 
 namespace CamadaCore.Context.SharedContext.Helpers
 {
     public class SGPMIHub: Hub  
     {
-        public async Task AtualizarMaquinasApp()
-        {            
-            await Clients.Others.SendAsync("AtualizarMaquinas");
-        }
-
-        public async Task AbrirConexao()
+        public SGPMIHub()
         {
-            await Clients.Caller.SendAsync("ConexaoAberta");
+
+        }
+        public async Task AtualizarMaquinasApp()
+        {
+            if(Clients!= null)
+            {
+                await this.Clients.Others.SendAsync("AtualizarMaquinas");
+            }
+            
+        }
+        public override Task OnConnectedAsync()
+        {
+            return base.OnConnectedAsync();
+        }
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }

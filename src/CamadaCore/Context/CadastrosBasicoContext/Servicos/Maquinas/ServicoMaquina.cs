@@ -12,6 +12,7 @@ using System;
 using System.Threading;
 using CamadaCore.Context.SharedContext.Helpers;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Maquinas
 {
@@ -21,15 +22,17 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Maquinas
         private readonly IRepositorioMaquinaLeitura _repositorioLeituraMaquina;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly IHubContext<SGPMIHub> _hub;
 
         public ServicoMaquina(IRepositorioMaquina repositorioMaquina, IRepositorioMaquinaLeitura repositorioLeituraMaquina, 
-            INotificacao notificacao, IMapper mapper, ILogger<ServicoMaquina> logger, IMediator mediator)
+            INotificacao notificacao, IMapper mapper, ILogger<ServicoMaquina> logger, IMediator mediator, IHubContext<SGPMIHub> hub)
             : base(repositorioMaquina, notificacao, logger)
         {
             _repositorioMaquina = repositorioMaquina;
             _repositorioLeituraMaquina = repositorioLeituraMaquina;
             _mapper = mapper;
             _mediator = mediator;
+            _hub = hub;
         }
 
         public async Task AlterarStatusMaquina(Maquina maquina)
@@ -37,21 +40,21 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Maquinas
             await SalvarAsync(maquina);
             try
             {
-                //CancellationToken cancellationToken = new CancellationToken();
-                //await _mediator.Publish(new PushNotification
-                //{
-                //    app_id = "056f6456-136c-4238-80c6-33f8fe521bcc",
-                //    included_segments = "All",
-                //    data = "bar",
-                //    subtitle = "Aviso",
-                //    headings = "Aviso",
-                //    contents = maquina.Nome + (maquina.Ligada ? " foi ligada" : " foi desligada")
-                //}, cancellationToken) ;
+                CancellationToken cancellationToken = new CancellationToken();
+                await _mediator.Publish(new PushNotification
+                {
+                    app_id = "056f6456-136c-4238-80c6-33f8fe521bcc",
+                    included_segments = "All",
+                    data = "bar",
+                    subtitle = "Aviso",
+                    headings = "Aviso",
+                    contents = maquina.Nome + (maquina.Ligada ? " foi ligada" : " foi desligada")
+                }, cancellationToken);
 
-                SGPMIHub _signalR = new SGPMIHub();
+                //SGPMIHub _signalR = new SGPMIHub();
 
                 //List<Maquina> maquinas = new List<Maquina>();
-                await _signalR.AtualizarMaquinasApp();
+                await _hub.Clients.All.SendAsync("AtualizarMaquinas");
             }
             catch (Exception ex)
             {
