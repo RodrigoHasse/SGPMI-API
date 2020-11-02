@@ -5,6 +5,7 @@ using CamadaInfra.Database.Repositorio.SharedContext.Dapper;
 using Microsoft.Extensions.Configuration;
 using Optional;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
             var sb = new StringBuilder();
             sb.AppendLine("SELECT Count(par.Id) FROM Paradas par");
             sb.AppendLine(RetornarJoins());
-            sb.AppendLine(Filtrar(filtros, false));
+            sb.AppendLine(Filtrar(filtros));
             return sb.ToString();
         }
 
@@ -37,10 +38,11 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
         {
             var sb = new StringBuilder();
             sb.Clear();
-            sb.AppendLine("SELECT par.Id, par.UsuarioId, par.MaquinaId, par.MotivoId, par.DataCriacao, usu.Nome as UsuarioNome, maq.Nome as MaquinaNome, mot.Nome as MotivoNome ");
+            sb.AppendLine("SELECT par.Id, par.UsuarioId, par.MaquinaId, par.MotivoId, par.DataCriacao, usu.Nome as UsuarioNome, maq.Nome as MaquinaNome, mot.Nome as MotivoNome, par.DataFimParada, par.TotalParada, par.DataInicioParada, par.TempoParada ");
             sb.AppendLine(" from Paradas par");
             sb.AppendLine(RetornarJoins());
             sb.AppendLine(Filtrar(filtro));
+            sb.AppendLine(" ORDER BY par.DataInicioParada desc");
             return sb.ToString();
         }
 
@@ -53,30 +55,20 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
             return sb.ToString();
         }
 
-        private string Filtrar(FiltroParadasInputModel filtro, bool ordenar = true)
+        private string Filtrar(FiltroParadasInputModel filtro)
         {
             var sb = new StringBuilder();
-            bool ordenarPorCampo = false;
 
-            if (!string.IsNullOrWhiteSpace(filtro.Valor))
+            if (filtro.DataInicial != null)
             {
-                if ((!string.IsNullOrEmpty(filtro.Campo)) && (!string.IsNullOrEmpty(filtro.Valor)))
-                {
-                    if(filtro.Tipo == "string")
-                        sb.AppendLine($" WHERE {filtro.Campo} LIKE '%{filtro.Valor}%'");
-                    if (filtro.Tipo == "int")
-                        sb.AppendLine($" WHERE {filtro.Campo} = {filtro.Valor}");
-
-                    ordenarPorCampo = true;
-                }
+                string isoFormatDateString = filtro.DataInicial.ToString("yyyy-MM-ddT00:00:00.fffzzz");
+                sb.AppendLine($" WHERE par.dataInicioParada >= '{isoFormatDateString}'");
             }
 
-            if (ordenar)
+            if (filtro.DataFinal != null)
             {
-                if (ordenarPorCampo)
-                    sb.AppendLine($" ORDER BY {filtro.Campo}");
-                else
-                    sb.AppendLine(" ORDER BY par.Id");
+                string isoFormatDateString = filtro.DataFinal.ToString("yyyy-MM-ddT23:59:59.fffzzz");
+                sb.AppendLine($" AND par.dataInicioParada <= '{isoFormatDateString}'");
             }
 
             return sb.ToString();
@@ -100,6 +92,19 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
                 }
             }
             return valor;
+        }
+
+        public async Task<decimal> RetornarTotalTempoParada(FiltroParadasInputModel filtro)
+        {
+            var sb = new StringBuilder();
+            sb.Clear();
+            sb.AppendLine("SELECT sum(par.TempoParada) as Total");
+            sb.AppendLine(" from Paradas par");
+            sb.AppendLine(RetornarJoins());
+            sb.AppendLine(Filtrar(filtro));
+            //return sb.ToString();
+
+            return await RetornarDecimalAsync(sb.ToString());
         }
     }
 }

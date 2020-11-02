@@ -25,7 +25,7 @@ namespace CamadaCore.Context.ConfiguracoesContext.Servicos.Usuarios
 
         public async Task<Option<Usuario>> RetornarPorUsuarioSenhaAsync(string login, string senha)
         {   
-            return await _repositorioUsuario.RetornarPorExpressionAsync(x => x.Login == login);
+            return await _repositorioUsuario.RetornarPorExpressionAsync(x => x.Login == login && x.Senha == senha);
         }
 
         public override async Task ValidarAsync(Usuario usuario)

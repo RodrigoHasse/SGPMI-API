@@ -51,9 +51,6 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Maquinas
                     contents = maquina.Nome + (maquina.Ligada ? " foi ligada" : " foi desligada")
                 }, cancellationToken);
 
-                //SGPMIHub _signalR = new SGPMIHub();
-
-                //List<Maquina> maquinas = new List<Maquina>();
                 await _hub.Clients.All.SendAsync("AtualizarMaquinas");
             }
             catch (Exception ex)
@@ -61,7 +58,6 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Maquinas
                 _notificacao.Adicionar(ex.Message);
             }
         }
-
         public override async Task ValidarAsync(Maquina maquina)
         {
             var maquinaValidacao = new MaquinaValidacao(maquina);

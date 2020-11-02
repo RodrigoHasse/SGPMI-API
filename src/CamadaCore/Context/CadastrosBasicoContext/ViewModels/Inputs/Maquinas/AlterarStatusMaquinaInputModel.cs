@@ -8,5 +8,6 @@ namespace CamadaCore.Context.CadastrosBasicoContext.ViewModels.Inputs.Maquinas
     {
         public int MaquinaId { get; set; }
         public bool Ligada { get; set; }
+        public DateTime DataParada { get; set; }
     }
 }

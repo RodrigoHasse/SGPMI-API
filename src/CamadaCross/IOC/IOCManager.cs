@@ -33,6 +33,13 @@ using CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas;
 using CamadaCore.Context.CadastrosBasicoContext.Servicos.Paradas;
 using CamadaAplicacao.Context.CadastrosBasicosContext.Servicos.Paradas;
 using CamadaAplicacao.Context.CadastrosBasicosContext.Interfaces.Paradas;
+using CamadaInfra.Database.Repositorio.CadastrosBasicoContext.EntityFramework.CategoriaMotivos;
+using CamadaCore.Context.CadastrosBasicoContext.Interfaces.Entity.CategoriaMotivos;
+using CamadaCore.Context.CadastrosBasicoContext.Interfaces.Dapper.CategoriaMotivo;
+using CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.CategoriaMotivo;
+using CamadaCore.Context.CadastrosBasicoContext.Servicos.CategoriaMotivos;
+using CamadaAplicacao.Context.CadastrosBasicosContext.Interfaces.CategoriaMotivos;
+using CamadaAplicacao.Context.CadastrosBasicosContext.Servicos.CategoriaMotivos;
 
 namespace CamadaCross.IOC
 {
@@ -51,12 +58,14 @@ namespace CamadaCross.IOC
             services.AddScoped<IRepositorioMaquina, RepositorioMaquina>();
             services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
             services.AddScoped<IRepositorioMotivo, RepositorioMotivo>();
+            services.AddScoped<IRepositorioCategoriaMotivo, RepositorioCategoriaMotivo>();
             services.AddScoped<IRepositorioParada, RepositorioParada>();
 
             // REPOSITORIO DAPPER
             // services.AddScoped(typeof(IRepositorioBaseLeitura<OutputBasico, FiltroBasicoInput>), typeof(RepositorioBaseDapper<OutputBasico, FiltroBasicoInput>));
             services.AddScoped<IRepositorioMaquinaLeitura, RepositorioMaquinaDapper>();
             services.AddScoped<IRepositorioMotivoLeitura, RepositorioMotivoDapper>();
+            services.AddScoped<IRepositorioCategoriaMotivoLeitura, RepositorioCategoriaMotivoDapper>();
             services.AddScoped<IRepositorioUsuarioLeitura, RepositorioUsuarioDapper>();
             services.AddScoped<IRepositorioParadaLeitura, RepositorioParadaDapper>();
 
@@ -67,10 +76,12 @@ namespace CamadaCross.IOC
             services.AddScoped<IServicoMaquina, ServicoMaquina>();
             services.AddScoped<IServicoUsuario, ServicoUsuario>();
             services.AddScoped<IServicoMotivo, ServicoMotivo>();
+            services.AddScoped<IServicoCategoriaMotivo, ServicoCategoriaMotivo>();
             services.AddScoped<IServicoParada, ServicoParada>();
 
             services.AddScoped(typeof(ServicoMaquina));
             services.AddScoped(typeof(ServicoMotivo));
+            services.AddScoped(typeof(ServicoCategoriaMotivo));
             services.AddScoped(typeof(ServicoUsuario));
             services.AddScoped(typeof(ServicoParada));
 
@@ -79,6 +90,7 @@ namespace CamadaCross.IOC
             services.AddScoped<IServicoAplicacaoMaquina, ServicoAplicacaoMaquina>();
             services.AddScoped<IServicoAplicacaoUsuario, ServicoAplicacaoUsuario>();
             services.AddScoped<IServicoAplicacaoMotivo, ServicoAplicacaoMotivo>();
+            services.AddScoped<IServicoAplicacaoCategoriaMotivo, ServicoAplicacaoCategoriaMotivo>();
             services.AddScoped<IServicoAplicacaoParada, ServicoAplicacaoParada>();
 
             // SERVICOS                       

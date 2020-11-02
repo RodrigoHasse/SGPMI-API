@@ -15,8 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
-using System;
 //using Swashbuckle.AspNetCore.Swagger;
 using System.Linq;
 using System.Security.Claims;

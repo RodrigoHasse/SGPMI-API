@@ -1,5 +1,7 @@
 ﻿using FluentValidator.Validation;
 using CamadaCore.Context.SharedContext.Models;
+using CamadaCore.Context.CadastrosBasicoContext.Models.Paradas;
+using System.Collections.Generic;
 
 namespace CamadaCore.Context.CadastrosBasicoContext.Models.Maquinas
 {
@@ -7,6 +9,7 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Models.Maquinas
     {
         public string Nome { get; private set; }
         public bool Ligada { get; set; }
+        public virtual List<Parada> Paradas { get; set; }
     }
 
     public class MaquinaValidacao : IContract

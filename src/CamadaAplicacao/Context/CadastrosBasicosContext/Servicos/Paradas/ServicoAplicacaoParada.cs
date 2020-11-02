@@ -31,20 +31,9 @@ namespace CamadaAplicacao.Context.CadastrosBasicosContext.Servicos.Paradas
             _repositorioLeituraParada = repositorioLeituraParada;
         }
 
-        //public async Task<IEnumerable<ComboPadraoOutput>> RetornarComboAsync(FiltroParadasInputModel filtros)
-        //{
-        //    var listaCombo = await _repositorioLeituraParada.ListarAsync();
-
-
-        //    IEnumerable<ParadaOutputModel> entidade = listaCombo.Match(
-        //        some: lista => lista,
-        //        none: () =>
-        //        {
-        //            _servicoParada.RetornarNotificacao().Adicionar("Nenhum registro encontrado.");
-        //            return Enumerable.Empty<ParadaOutputModel>();
-        //        });
-
-        //    return entidade.Select(x => new ComboPadraoOutput { id = x.Id, label = x.Nome });
-        //}
+        public async Task<decimal> RetornarTotalTempoParada(FiltroParadasInputModel filtro)
+        {
+            return await _repositorioLeituraParada.RetornarTotalTempoParada(filtro);
+        }
     }
 }

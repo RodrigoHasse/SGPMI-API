@@ -62,5 +62,16 @@ namespace CamadaWebApi.Context.CadastrosBasicoContext.Controllers.Paradas
 
             return Ok();
         }
+        [HttpPost("RetornarTotalTempoParada")]
+        [ProducesResponseType(typeof(decimal), 200)]
+        public async Task<IActionResult> RetornarTotalTempoParada(FiltroParadasInputModel filtro)
+        {
+            var Total = await _servicoAplicacaoParada.RetornarTotalTempoParada(filtro);
+
+            if (!_servicoAplicacaoParada.RetornarNotificacao().IsValid())
+                return BadRequest(error: ErroSistemaHelper.retornarErroDetalhado(null, _servicoAplicacaoParada.RetornarNotificacao().RetornarErros()));
+
+            return Ok(Total);
+        }
     }
 }

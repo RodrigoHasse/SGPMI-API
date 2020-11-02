@@ -11,5 +11,6 @@ namespace CamadaAplicacao.Context.CadastrosBasicosContext.Interfaces.Maquinas
     public interface IServicoAplicacaoMaquina : IServicoAplicacaoBasico<Maquina, MaquinaInputModel, MaquinaOutputModel, FiltroMaquinasInputModel>
     {
         Task AlterarStatusMaquina(AlterarStatusMaquinaInputModel statusMaquina);
+        Task<IEnumerable<MaquinaOutputModel>> RetornaVariosAppAsync();
     }
 }

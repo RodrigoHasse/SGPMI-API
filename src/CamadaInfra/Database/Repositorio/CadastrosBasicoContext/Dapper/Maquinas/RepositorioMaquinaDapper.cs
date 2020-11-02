@@ -5,7 +5,6 @@ using CamadaInfra.Database.Repositorio.SharedContext.Dapper;
 using Microsoft.Extensions.Configuration;
 using Optional;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,11 +14,12 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Maquina
     {
         public RepositorioMaquinaDapper(IConfiguration config) : base(config)
         {
+
         }
 
         public override async Task<Option<IEnumerable<MaquinaOutputModel>>> ListarAsync(FiltroMaquinasInputModel filtro)
         {
-            List<MaquinaOutputModel> retorno = new List<MaquinaOutputModel>();
+                    //List<MaquinaOutputModel> retorno = new List<MaquinaOutputModel>();
             //retorno.TotalRegitros = await RetornarInteiroAsync(BuscarQuantidadeCidades(filtros));            
 
             return await RetornarTodosAsync(BuscarMaquinas());
@@ -46,7 +46,8 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Maquina
             sb.AppendLine(" maq.Ligada,");
             sb.AppendLine(" maq.Nome");
             sb.AppendLine(" from Maquinas maq");
-            sb.AppendLine(RetornarJoins());
+            
+            //sb.AppendLine(RetornarJoins());
 
             //sb.AppendLine(Filtrar(filtro));
 
@@ -57,10 +58,9 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Maquina
 
         private string RetornarJoins()
         {
-            //var sb = new StringBuilder();
-            //sb.AppendLine(" Inner join estados est on cid.EstadoId = est.id");
-            //sb.AppendLine(" Inner join paises pai on est.PaisId = pai.id");
-            return "";
+            var sb = new StringBuilder();
+            sb.AppendLine(" Inner join Paradas par on par.MaquinaId = maq.Id");
+            return sb.ToString();
         }
 
         private string Filtrar(FiltroMaquinasInputModel filtro, bool ordenar = true)

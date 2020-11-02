@@ -73,11 +73,62 @@ namespace CamadaAplicacao.Context.CadastrosBasicosContext.Servicos.Maquinas
 
             if (!statusMaquina.Ligada)
             {
+                TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+                statusMaquina.DataParada = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, easternZone);
+                var parada = new Parada
+                {
+                    Id = 0,
+                    MaquinaId = statusMaquina.MaquinaId,
+                    DataInicioParada = statusMaquina.DataParada,
+                    DataFimParada = null
+                };
+                
                 await TransacaoWrapper(() =>
                 {
-                    _servicoParada.SalvarAsync(new Parada { Id = 0, MaquinaId = statusMaquina.MaquinaId });
+                    _servicoParada.SalvarAsync(parada);
                 });
             }
+            else
+            {
+                var paradas = await _servicoParada.RetornarVariosAsync();                
+                IEnumerable<Parada> entidade = paradas.Match
+                (
+                    some: lista => lista,
+                    none: () =>
+                    {
+                        _servicoMaquina.RetornarNotificacao().Adicionar("Nenhum registro encontrado.");
+                        return Enumerable.Empty<Parada>();
+                    }
+                );
+
+                var UltimaParada = entidade.Last();
+
+                TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+                UltimaParada.DataFimParada = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local,easternZone);
+                TimeSpan? tempoParada2 = UltimaParada.DataFimParada - UltimaParada.DataInicioParada;
+                TimeSpan tempoParada = (TimeSpan)tempoParada2;
+                UltimaParada.TotalParada = tempoParada;
+                UltimaParada.TempoParada = tempoParada.TotalMinutes;
+                await TransacaoWrapper(() =>
+                {
+                    _servicoParada.SalvarAsync(UltimaParada);
+                });
+            }
+        }
+
+        public async Task<IEnumerable<MaquinaOutputModel>> RetornaVariosAppAsync()
+        {
+            var maquinas = await _servicoMaquina.RetornarVariosAsync();
+            IEnumerable<Maquina> entidade = maquinas.Match
+            ( 
+                some: lista => lista,
+                none: () =>
+                {
+                    _servicoMaquina.RetornarNotificacao().Adicionar("Nenhum registro encontrado.");
+                    return Enumerable.Empty<Maquina>();
+                }
+            );          
+            return _mapper.Map<IEnumerable<Maquina>, IEnumerable<MaquinaOutputModel>>(entidade);
         }
     }
 }

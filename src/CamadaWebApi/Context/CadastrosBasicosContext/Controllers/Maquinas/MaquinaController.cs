@@ -72,5 +72,16 @@ namespace CamadaWebApi.Context.CadastrosBasicoContext.Controllers.Maquinas
 
             return Ok();
         }
+
+        [HttpPost("RetornaVariosAppAsync")]
+        public async Task<IActionResult> RetornaVariosAppAsync()
+        {
+            var maquinas = await _servicoAplicacaoMaquina.RetornaVariosAppAsync();
+
+            if (!_servicoAplicacaoMaquina.RetornarNotificacao().IsValid())
+                return BadRequest(error: ErroSistemaHelper.retornarErroDetalhado(null, _servicoAplicacaoMaquina.RetornarNotificacao().RetornarErros()));
+
+            return Ok(maquinas);
+        }
     }
 }

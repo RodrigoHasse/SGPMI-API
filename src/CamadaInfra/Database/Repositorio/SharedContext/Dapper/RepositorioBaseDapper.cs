@@ -55,6 +55,17 @@ namespace CamadaInfra.Database.Repositorio.SharedContext.Dapper
             }
         }
 
+        public async Task<decimal> RetornarDecimalAsync(string instrucaoSQL)
+        {
+            var conexao = ConexaoBanco();
+
+            using (var db = new SqlConnection(conexao))
+            {
+                var consulta = await db.QueryAsync<decimal>(instrucaoSQL);
+                return consulta.FirstOrDefault();
+            }
+        }
+
         private async Task<Option<IEnumerable<T>>> RetornarTodosWrapper(Func<IDbConnection, Task<IEnumerable<T>>> acao)
         {
             var conexao = ConexaoBanco();

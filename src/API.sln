@@ -17,11 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CamadaCross", "CamadaCross\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - aplicacao", "3 - aplicacao", "{50BA00B1-AA11-41E0-B32E-9C7432B7B17C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamadaCore", "CamadaCore\CamadaCore.csproj", "{CA518E38-F4E3-42A4-829B-A4EE3C15CAB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CamadaCore", "CamadaCore\CamadaCore.csproj", "{CA518E38-F4E3-42A4-829B-A4EE3C15CAB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamadaInfra", "CamadaInfra\CamadaInfra.csproj", "{969FDFF2-6DF1-4A38-B5F4-96703715B4D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CamadaInfra", "CamadaInfra\CamadaInfra.csproj", "{969FDFF2-6DF1-4A38-B5F4-96703715B4D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamadaAplicacao", "CamadaAplicacao\CamadaAplicacao.csproj", "{279D1A44-970B-46A5-8838-03B8EF179E2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CamadaAplicacao", "CamadaAplicacao\CamadaAplicacao.csproj", "{279D1A44-970B-46A5-8838-03B8EF179E2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

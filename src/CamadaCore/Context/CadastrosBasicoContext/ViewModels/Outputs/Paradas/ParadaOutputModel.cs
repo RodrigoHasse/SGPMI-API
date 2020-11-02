@@ -15,5 +15,9 @@ namespace CamadaCore.Context.CadastrosBasicoContext.ViewModels.Outputs.Paradas
         public string MaquinaNome { get; set; }
         public int? MotivoId { get; set; }
         public string MotivoNome { get; set; }
+        public DateTime? DataFimParada { get; set; }
+        public DateTime? DataInicioParada { get; set; }
+        public TimeSpan? TotalParada { get; set; }
+        public double? TempoParada { get; set; }
     }    
 }

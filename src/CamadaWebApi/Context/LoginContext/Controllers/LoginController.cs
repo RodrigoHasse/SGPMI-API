@@ -44,7 +44,7 @@ namespace CamadaWebApi.Context.LoginContext.Controllers
         
         [AllowAnonymous]
         [HttpPost("Authenticate")]
-        public async Task<IActionResult> AuthenticateAsync(LoginAuthenticationInput model)
+        public async Task<IActionResult> Authenticate(LoginAuthenticationInput model)
         {
             // verifica se login e password foram informados
             if (string.IsNullOrEmpty(model.Login) || string.IsNullOrEmpty(model.Password))
@@ -54,7 +54,7 @@ namespace CamadaWebApi.Context.LoginContext.Controllers
             _usuario = await _servicoAplicacaoUsuario.RetornarPorUsuarioSenhaAsync(model.Login, model.Password);
 
             if (_usuario == null)
-                return BadRequest("Usuário inválido!");
+                return BadRequest("Credenciais inválidas!");
 
             JwtSecurityToken token = _tokenManager.GetJwtSecurityToken(_usuario.Id, _usuario.Login, "PERFIL", _usuario.Nome);
 
