@@ -51,7 +51,7 @@ namespace CamadaAplicacao.Context.SharedContext.Servicos
             return _mapper.Map<T, Out>(entidade);
         }
 
-        public async Task<IEnumerable<Out>> RetornarVariosAsync()
+        public virtual async Task<IEnumerable<Out>> RetornarVariosAsync()
         {
             var consulta = await _servicoBasico.RetornarVariosAsync();
 
@@ -65,7 +65,7 @@ namespace CamadaAplicacao.Context.SharedContext.Servicos
             return _mapper.Map<IEnumerable<T>, IEnumerable<Out>>(entidades);
         }
 
-        public async Task<IEnumerable<Out>> ListarAsync(InFiltro filtro)
+        public virtual async Task<IEnumerable<Out>> ListarAsync(InFiltro filtro)
         {
             var consulta = await _repositorioBaseLeitura.ListarAsync(filtro);
 

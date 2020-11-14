@@ -1,9 +1,13 @@
 ﻿using CamadaAplicacao.Context.CadastrosBasicosContext.Interfaces.Paradas;
 using CamadaCore.Context.CadastrosBasicoContext.ViewModels.Inputs.Paradas;
 using CamadaCore.Context.CadastrosBasicoContext.ViewModels.Outputs.Paradas;
+using CamadaCore.Context.CadastrosBasicoContext.ViewModels.Outputs.Relatorios;
 using CamadaCore.Context.SharedContext.ViewModels.Inputs;
+using CamadaWebApi.Context.SharedContext.Helpers;
 using CamadaWebApi.Context.SharedContext.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CamadaWebApi.Context.CadastrosBasicoContext.Controllers.Paradas
@@ -26,13 +30,13 @@ namespace CamadaWebApi.Context.CadastrosBasicoContext.Controllers.Paradas
                 return BadRequest(error: ErroSistemaHelper.retornarErroDetalhado(null, _servicoAplicacaoParada.RetornarNotificacao().RetornarErros()));
 
             return Ok();
-        } 
+        }
 
         [HttpPost("RetornarVarios")]
         [ProducesResponseType(typeof(ParadaOutputModel[]), 200)]
         public async Task<IActionResult> RetornarVarios(FiltroParadasInputModel filtro)
         {
-            var Paradas = await _servicoAplicacaoParada.ListarAsync(filtro);
+            var Paradas = await _servicoAplicacaoParada.RetornarParadas(filtro);
 
             if (!_servicoAplicacaoParada.RetornarNotificacao().IsValid())
                 return BadRequest(error: ErroSistemaHelper.retornarErroDetalhado(null, _servicoAplicacaoParada.RetornarNotificacao().RetornarErros()));
@@ -73,5 +77,35 @@ namespace CamadaWebApi.Context.CadastrosBasicoContext.Controllers.Paradas
 
             return Ok(Total);
         }
+        [HttpPost("Relatorio")]
+        [ProducesResponseType(typeof(RelatorioOutput), 200)]
+        public async Task<IActionResult> Relatorio([FromBody] FiltroParadasInputModel filtros)
+        {
+            var retorno = await _servicoAplicacaoParada.RetornarParadas(filtros);
+
+            var data1 = retorno.Select(x => new ParadaRelatorioOutputModel
+            {
+                MaquinaNome = x.MaquinaNome,
+                TempoParada = x.TempoParada,
+                MotivoNome = x.MotivoNome,
+                UsuarioNome = x.UsuarioNome,
+                PercentualTempoParada = x.PercentualTempoParada
+            });
+
+            var estados = data1;
+            var retornoRel = new RelatorioOutput();
+
+            var model = estados;
+            var colunas = new String[] { "Máquina", "Tempo", "Motivo", "Usuário", "%" };
+            var data = new dataRel { subTitulo = "", dados = model };
+            var dados = new dataRel[] { data };
+            var total = await _servicoAplicacaoParada.RetornarTotalTempoParada(filtros);
+
+            
+
+            retornoRel = RetornoRelatorioHelper.montarRetornoRelatorio("Relatório de Paradas", colunas, dados, total);
+            return new JsonResult(retornoRel);
+        }
+            
     }
 }

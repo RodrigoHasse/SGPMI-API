@@ -46,7 +46,7 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Motivos
             sb.AppendLine(" mot.Nome");
             sb.AppendLine(" from Motivos mot");
             sb.AppendLine(RetornarJoins());
-
+            sb.AppendLine("Order by mot.Nome");
             //sb.AppendLine(Filtrar(filtro));
 
             //sb.AppendLine($" OFFSET {avanco} ROWS ");

@@ -30,6 +30,8 @@ namespace CamadaCore.Context.CadastrosBasicoContext.Servicos.Paradas
 
             foreach (var notificacao in ParadaValidacao.Contract.Notifications)
                 _notificacao.Adicionar(notificacao.Message);
-        }      
+        }
+        
+
     }
 }

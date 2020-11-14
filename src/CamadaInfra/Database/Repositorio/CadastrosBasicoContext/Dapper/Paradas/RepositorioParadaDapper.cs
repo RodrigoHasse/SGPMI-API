@@ -98,7 +98,7 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
         {
             var sb = new StringBuilder();
             sb.Clear();
-            sb.AppendLine("SELECT sum(par.TempoParada) as Total");
+            sb.AppendLine("SELECT coalesce(sum(par.TempoParada), 0) as Total");
             sb.AppendLine(" from Paradas par");
             sb.AppendLine(RetornarJoins());
             sb.AppendLine(Filtrar(filtro));

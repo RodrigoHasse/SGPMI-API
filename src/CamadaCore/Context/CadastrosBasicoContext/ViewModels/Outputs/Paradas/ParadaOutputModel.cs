@@ -19,5 +19,6 @@ namespace CamadaCore.Context.CadastrosBasicoContext.ViewModels.Outputs.Paradas
         public DateTime? DataInicioParada { get; set; }
         public TimeSpan? TotalParada { get; set; }
         public double? TempoParada { get; set; }
+        public decimal? PercentualTempoParada { get; set; }
     }    
 }

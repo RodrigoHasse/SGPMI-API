@@ -35,5 +35,27 @@ namespace CamadaAplicacao.Context.CadastrosBasicosContext.Servicos.Paradas
         {
             return await _repositorioLeituraParada.RetornarTotalTempoParada(filtro);
         }
+
+        public async Task<IEnumerable<ParadaOutputModel>> RetornarParadas(FiltroParadasInputModel filtro)
+        {
+            var consulta = await _repositorioLeituraParada.ListarAsync(filtro);
+
+            IEnumerable<ParadaOutputModel> paradas = consulta.Match(
+                some: retorno => retorno,
+                none: () =>
+                {
+                    _servicoParada.RetornarNotificacao().Adicionar("Nenhum registro encontrado.");
+                    return Enumerable.Empty<ParadaOutputModel>();
+                });
+            var total = await _repositorioLeituraParada.RetornarTotalTempoParada(filtro);
+
+            foreach (var item in paradas)
+            {                
+                if(item.TempoParada != null)
+                    item.PercentualTempoParada = ( (decimal)item.TempoParada / total) * 100;
+            };
+
+            return paradas;
+        }
     }
 }
