@@ -2,6 +2,7 @@
 using CamadaCore.Context.CadastrosBasicoContext.ViewModels.Inputs.Paradas;
 using CamadaCore.Context.CadastrosBasicoContext.ViewModels.Outputs.Paradas;
 using CamadaInfra.Database.Repositorio.SharedContext.Dapper;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using Optional;
 using System.Collections.Generic;
@@ -25,6 +26,20 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
             return await RetornarTodosAsync(BuscarParadas(filtro));
         }
 
+        public async Task<Option<IEnumerable<ParadasResumoMotivoInputModel>>> ResumoParadasPorMotivoAsync(FiltroParadasInputModel filtro)
+        {
+            var conexao = ConexaoBanco();
+
+            using (var db = new SqlConnection(conexao))
+            {
+                await db.OpenAsync();
+                var ret = await db.QueryAsync<ParadasResumoMotivoInputModel>(BuscarResumoParadasPorMotivo(filtro));
+
+                return ret == null ? Option.None<IEnumerable<ParadasResumoMotivoInputModel>>() : 
+                    Option.Some<IEnumerable<ParadasResumoMotivoInputModel>>(ret);                
+            }
+        }
+
         private string BuscarQuantidadeParadas(FiltroParadasInputModel filtros)
         {
             var sb = new StringBuilder();
@@ -43,6 +58,19 @@ namespace CamadaInfra.Database.Repositorio.CadastrosBasicoContext.Dapper.Paradas
             sb.AppendLine(RetornarJoins());
             sb.AppendLine(Filtrar(filtro));
             sb.AppendLine(" ORDER BY par.DataInicioParada desc");
+            return sb.ToString();
+        }
+
+        private string BuscarResumoParadasPorMotivo(FiltroParadasInputModel filtro)
+        {
+            var sb = new StringBuilder();
+            sb.Clear();
+            sb.AppendLine("select sum(par.TempoParada) as Total, count(par.Id) as Quant ,Motivos.Nome as Nome");
+            sb.AppendLine("from Paradas par");
+            sb.AppendLine("inner join Motivos on Motivos.Id = par.MotivoId");
+            sb.AppendLine(Filtrar(filtro));
+            sb.AppendLine("group by Motivos.Nome");
+            sb.AppendLine("order by Total desc");
             return sb.ToString();
         }
 

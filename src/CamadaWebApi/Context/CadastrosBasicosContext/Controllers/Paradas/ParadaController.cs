@@ -44,6 +44,18 @@ namespace CamadaWebApi.Context.CadastrosBasicoContext.Controllers.Paradas
             return Ok(Paradas);
         }
 
+        [HttpPost("RetornarResumoParadasPorMotivo")]
+        [ProducesResponseType(typeof(ParadasResumoMotivoInputModel[]), 200)]
+        public async Task<IActionResult> RetornarResumoParadasPorMotivo(FiltroParadasInputModel filtro)
+        {
+            var Paradas = await _servicoAplicacaoParada.RetornarResumoParadasPorMotivo(filtro);
+
+            if (!_servicoAplicacaoParada.RetornarNotificacao().IsValid())
+                return BadRequest(error: ErroSistemaHelper.retornarErroDetalhado(null, _servicoAplicacaoParada.RetornarNotificacao().RetornarErros()));
+
+            return Ok(Paradas);
+        }
+
         [HttpPost("RetornarPorId")]
         [ProducesResponseType(typeof(ParadaOutputModel), 200)]
         public async Task<IActionResult> RetornarPorId(ParamIdInput param)

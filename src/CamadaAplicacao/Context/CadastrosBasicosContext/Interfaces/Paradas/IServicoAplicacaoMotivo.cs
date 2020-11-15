@@ -11,5 +11,6 @@ namespace CamadaAplicacao.Context.CadastrosBasicosContext.Interfaces.Paradas
     {
         Task<decimal> RetornarTotalTempoParada(FiltroParadasInputModel filtro);
         Task<IEnumerable<ParadaOutputModel>> RetornarParadas(FiltroParadasInputModel filtro);
+        Task<IEnumerable<ParadasResumoMotivoInputModel>> RetornarResumoParadasPorMotivo(FiltroParadasInputModel filtro);
     }
 }

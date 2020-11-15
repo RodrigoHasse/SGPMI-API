@@ -66,7 +66,7 @@ namespace CamadaInfra.Database.Repositorio.SharedContext.Dapper
             }
         }
 
-        private async Task<Option<IEnumerable<T>>> RetornarTodosWrapper(Func<IDbConnection, Task<IEnumerable<T>>> acao)
+        protected async Task<Option<IEnumerable<T>>> RetornarTodosWrapper(Func<IDbConnection, Task<IEnumerable<T>>> acao)
         {
             var conexao = ConexaoBanco();
 
@@ -80,7 +80,7 @@ namespace CamadaInfra.Database.Repositorio.SharedContext.Dapper
             }
         }
 
-        private string ConexaoBanco()
+        protected string ConexaoBanco()
         {
             return _configuration.GetSection("AppSettings").GetSection("ConnectionString").Value;
         }
